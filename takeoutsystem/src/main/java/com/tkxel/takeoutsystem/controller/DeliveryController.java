@@ -6,10 +6,13 @@ import com.tkxel.takeoutsystem.service.TakeOutSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 public class DeliveryController {
@@ -20,6 +23,7 @@ public class DeliveryController {
     ManageDeliveryService manageDeliveryService;
 
     @PostMapping("/takeoutsystem/acceptorder")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Boolean> assignDeliveryToOrder(@RequestParam("saleName") String saleName, @RequestParam("deliveryId") String deliveryId){
         try{
             Boolean saleFoundAndAccepted = takeOutSystem.acceptOrder(saleName, deliveryId);
@@ -33,6 +37,7 @@ public class DeliveryController {
     }
 
     @PostMapping("/takeoutsystem/terminateorder")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Boolean> markOrderComplete(@RequestParam("saleName") String saleName){
         try{
             Boolean saleFoundAndCompleted = takeOutSystem.terminateOrder(saleName);
@@ -46,6 +51,7 @@ public class DeliveryController {
     }
 
     @PostMapping("/managediliverycrudservice/createdilivery")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Boolean> addDelivery(@RequestBody Delivery deliveryObject){
         try{
             Boolean deliveryAddedSuccess = manageDeliveryService.createDelivery(deliveryObject);

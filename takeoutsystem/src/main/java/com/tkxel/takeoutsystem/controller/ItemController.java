@@ -9,7 +9,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @Log4j2
@@ -36,6 +39,7 @@ public class ItemController {
     }
 
     @PostMapping("/processorderservice/enteritem")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Boolean> enterItem(@RequestParam("saleId") Integer saleId,@RequestParam("itemId") Integer itemId, @RequestParam("quantity") Integer itemQuantity){
         try{
             Boolean itemEnterSuccess = processOrderService.enterItem(saleId, itemId, itemQuantity);
@@ -50,6 +54,7 @@ public class ItemController {
     }
 
     @PostMapping("/manageitemcrudservice/createitem")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addItem(@RequestBody Item itemObject, @RequestParam("storeId") Integer storeId) {
         try {
             log.info("Item Details Received - ItemName:" + itemObject.getItemName());
@@ -76,6 +81,7 @@ public class ItemController {
     }
 
     @PutMapping("/manageitemcrudservice/modifyitem")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateItem(@RequestBody Item item, @RequestParam Integer storeId){
         try{
             log.info("Item Details Received for - ItemId:"+item.getId());
@@ -90,6 +96,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/manageitemcrudservice/deleteitem")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> removeItem(@RequestParam Integer itemId){
         try{
             Boolean itemDeletedSuccess = manageItemService.deleteItem(itemId);

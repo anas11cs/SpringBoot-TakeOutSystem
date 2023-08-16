@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,6 +34,7 @@ public class StoreController {
     }
 
     @PostMapping("/managestorecrudservice/createstore")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addStore(@RequestBody Store storeObject){
         try{
             log.info("Store Details Recieved - StoreName:"+storeObject.getStoreName()+" & Store Address:"+storeObject.getStoreAddress()+" & Store Opened:"+storeObject.getIsOpened());
@@ -61,6 +63,7 @@ public class StoreController {
     }
 
     @PutMapping("/managestorecrudservice/modifystore")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateStore(@RequestBody Store updatedStoreObject){
         try{
             log.info("Store Details Recieved - StoreName:"+updatedStoreObject.getStoreName()+" & Store Address:"+updatedStoreObject.getStoreAddress()+" & Store Opened:"+updatedStoreObject.getIsOpened());
@@ -75,6 +78,7 @@ public class StoreController {
     }
 
     @DeleteMapping("/managestorecrudservice/deletestore")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> removeStore(@RequestParam("storeId") Integer storeId){
         try{
             log.info("Store Details Recieved for Deletion - storeId:"+storeId);

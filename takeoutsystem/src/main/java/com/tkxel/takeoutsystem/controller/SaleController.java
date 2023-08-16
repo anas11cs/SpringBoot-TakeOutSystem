@@ -6,6 +6,7 @@ import com.tkxel.takeoutsystem.service.TakeOutSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ public class SaleController {
     }
 
     @PostMapping("processorderservice/makeneworder")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addNewOrder(@RequestParam("storeId") Integer storeId, @RequestBody Sale sale){
         try{
             Boolean OrderCreated = processOrderService.makeNewOrder(storeId, sale);
@@ -46,6 +48,7 @@ public class SaleController {
     }
 
     @PostMapping("processorderservice/endorder")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BigDecimal> updateOrderEnd(@RequestParam("saleId") Integer saleId){
         try{
             BigDecimal totalSaleAmount = processOrderService.endOrder(saleId);
